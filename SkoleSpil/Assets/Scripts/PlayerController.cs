@@ -11,9 +11,10 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private int sensitivity = 5;
     [SerializeField] private int gravity = 10;
 
+    private int sprintSpeed = 1;
     private int jumpSpeed = 5;
     private int rotateMin = -15;
-    private int rotateMax = 15;
+    private int rotateMax = 50;
 
     private Vector3 moveDir = Vector3.zero;
     private Vector3 v3Rotate = Vector3.zero;
@@ -27,6 +28,15 @@ public class PlayerController : MonoBehaviour {
 
 	void Update ()
     {
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            sprintSpeed = 2;
+        }
+        else
+        {
+            sprintSpeed = 1;
+        }
+
         CharacterController controller = GetComponent<CharacterController>();
         if(controller.isGrounded)
         {
@@ -38,8 +48,8 @@ public class PlayerController : MonoBehaviour {
                 moveDir.y = jumpSpeed;
             }
         }
-        moveDir.y -= gravity*Time.deltaTime;
-        controller.Move(moveDir * Time.deltaTime);
+        moveDir.y -= gravity * Time.deltaTime;
+        controller.Move(moveDir * Time.deltaTime * sprintSpeed);
 
 
         v3Rotate.x += -Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensitivity;
